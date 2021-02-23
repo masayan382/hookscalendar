@@ -1,9 +1,7 @@
 import dayjs from "dayjs";
 
 export const createCalendar = (month) => {
-    console.log(month);
     const firstDay = getMonth(month);
-    console.log(firstDay);
     const firstDayIndex = firstDay.day();
 
     return Array(35)
