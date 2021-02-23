@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 
-import CalendarBoard from "./components/CalendarBoard/container";
+import CalendarBoard from "./components/CalendarBoard/presentation";
 import rootReducer from "./redux/rootReducer";
 
 import dayjs from "dayjs";

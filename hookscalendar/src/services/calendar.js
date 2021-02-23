@@ -1,7 +1,9 @@
 import dayjs from "dayjs";
 
 export const createCalendar = (month) => {
+    console.log(month);
     const firstDay = getMonth(month);
+    console.log(firstDay);
     const firstDayIndex = firstDay.day();
 
     return Array(35)
@@ -9,7 +11,6 @@ export const createCalendar = (month) => {
         .map((_, i) => {
             const diffFromFirstDay = i - firstDayIndex;
             const day = firstDay.add(diffFromFirstDay, "day");
-
             return day;
         });
 };

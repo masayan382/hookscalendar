@@ -3,10 +3,17 @@ import { GridList, Typography } from "@material-ui/core";
 
 import CalendarElement from "../CalendarElement";
 import * as styles from "./style.module.css";
+import { createCalendar } from "../../services/calendar";
+import { useSelector, useDispatch } from "react-redux"
 
 const days = ["日", "月", "火", "水", "木", "金", "土"];
 
-const CalendarBoard = ({ calendar }) => {
+const CalendarBoard = () => {
+    const dispatch = useDispatch();
+    const data = useSelector(state => state)
+    console.log(data);
+    const calendar = createCalendar(data.calendar);
+
     return (
         <div className={styles.container}>
             <GridList className={styles.grid} cols={7} spacing={0} cellHeight="auto">
