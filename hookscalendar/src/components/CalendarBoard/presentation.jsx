@@ -11,7 +11,6 @@ const days = ["日", "月", "火", "水", "木", "金", "土"];
 const CalendarBoard = () => {
     const dispatch = useDispatch();
     const data = useSelector(state => state)
-    console.log(data);
     const calendar = createCalendar(data.calendar);
 
     return (
