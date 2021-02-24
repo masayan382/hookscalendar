@@ -19,20 +19,15 @@ const StyledTypography = withStyles({
 
 const Navigation = () => {
     const dispatch = useDispatch();
-    const data = useSelector(state => state)
-    console.log(data);
-
-    const setMonth = (month) => {
-        dispatch(calendarSetMonth(month));
-    }
+    const data = useSelector(state => state.calendar)
 
     const setNextMonth = () => {
         const nextMonth = getNextMonth(data);
-        dispatch(setMonth(nextMonth));
+        dispatch(calendarSetMonth(nextMonth));
     }
     const setPreviousMonth = () => {
         const previousMonth = getPreviousMonth(data);
-        dispatch(setMonth(previousMonth))
+        dispatch(calendarSetMonth(previousMonth))
     }
 
 
