@@ -12,6 +12,7 @@ const CalendarBoard = () => {
     const dispatch = useDispatch();
     const data = useSelector(state => state)
     const calendar = createCalendar(data.calendar);
+    const month = data.calendar;
 
     return (
         <div className={styles.container}>
@@ -31,7 +32,7 @@ const CalendarBoard = () => {
                 ))}
                 {calendar.map(c => (
                     <li key={c.toISOString()}>
-                        <CalendarElement day={c} />
+                        <CalendarElement day={c} month={month} />
                     </li>
                 ))}
             </GridList>
