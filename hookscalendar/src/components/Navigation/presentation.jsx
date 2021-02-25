@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { IconButton, Toolbar, Typography, withStyles } from "@material-ui/core";
-
+import { DatePicker } from "@material-ui/pickers";
 import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIos from "@material-ui/icons/ArrowForwardIos";
 import DehazeIcon from "@material-ui/icons/Dehaze";
 import { useSelector, useDispatch } from "react-redux"
-import { getNextMonth, getPreviousMonth } from "../../services/calendar";
+import {
+    getNextMonth,
+    getPreviousMonth,
+    getMonth,
+    formatMonth
+} from "../../services/calendar";
 import { calendarSetMonth } from "../../redux/calendar/actions";
 
 const StyledToolbar = withStyles({
@@ -16,20 +21,32 @@ const StyledTypography = withStyles({
     root: { margin: "0 30px 0 10px" }
 })(Typography);
 
+const StyledDatePicker = withStyles({
+    root: { marginLeft: 30 }
+})(DatePicker);
 
 const Navigation = () => {
+
     const dispatch = useDispatch();
     const data = useSelector(state => state.calendar)
+
+    const month = getMonth(data);
+    console.log(month);
 
     const setNextMonth = () => {
         const nextMonth = getNextMonth(data);
         dispatch(calendarSetMonth(nextMonth));
     }
+
     const setPreviousMonth = () => {
         const previousMonth = getPreviousMonth(data);
         dispatch(calendarSetMonth(previousMonth))
     }
 
+    const setMonth = () => {
+        const setMonthForm = formatMonth(month);
+        dispatch(calendarSetMonth(setMonthForm))
+    };
 
     return (
         <StyledToolbar>
@@ -39,14 +56,22 @@ const Navigation = () => {
             <img src="/images/calendar_icon.png" width="40" height="40" />
             <StyledTypography color="textSecondary" variant="h5" component="h1">
                 カレンダー
-      </StyledTypography>
+            </StyledTypography>
             <IconButton size="small" onClick={setPreviousMonth}>
                 <ArrowBackIos />
             </IconButton>
             <IconButton size="small" onClick={setNextMonth}>
                 <ArrowForwardIos />
             </IconButton>
-        </StyledToolbar>
+            <StyledDatePicker
+                value={month}
+                onChange={() => { setMonth(); }}
+                variant="inline"
+                format="YYYY年 M月"
+                animateYearScrolling
+                disableToolbar
+            />
+        </StyledToolbar >
     );
 };
 
