@@ -12,7 +12,10 @@ import {
 } from "@material-ui/core";
 import { LocationOnOutlined, NotesOutlined } from "@material-ui/icons";
 import { withStyles } from "@material-ui/styles";
-import { addScheduleCloseDialog } from "../../redux/addSchedule/actions";
+import {
+    addScheduleCloseDialog,
+    addScheduleSetValue
+} from "../../redux/addSchedule/actions";
 
 const spacer = { margin: "4px 0" };
 
@@ -21,21 +24,43 @@ const Title = withStyles({
 })(Input);
 
 const AddScheduleDialog = ({ }) => {
-    const isDialogOpen = useSelector(state => state.addSchedule.isDialogOpen);
+    const state = useSelector(state => state.addSchedule);
+    const isDialogOpen = state.isDialogOpen
+    const form = state.form;
+    console.log(form);
+    const title = form.title;
+    const description = form.description;
+    const location = form.location;
+
     const dispatch = useDispatch();
     const closeDialog = () => {
         dispatch(addScheduleCloseDialog());
     }
+    const setSchedule = (value) => {
+        dispatch(addScheduleSetValue(value));
+    }
     return (
         <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="xs" fullWidth>
             <DialogContent>
-                <Title autoFocus fullWidth placeholder="タイトルと日時を追加" />
+                <Title
+                    autoFocus
+                    fullWidth
+                    placeholder="タイトルと日時を追加"
+                    value={title}
+                    onChange={e => setSchedule({ title: e.target.value })}
+                />
                 <Grid container spacing={1} alignItems="center" justify="space-between">
                     <Grid item>
                         <LocationOnOutlined />
                     </Grid>
                     <Grid item xs={10}>
-                        <TextField style={spacer} fullWidth placeholder="場所を追加" />
+                        <TextField
+                            style={spacer}
+                            fullWidth
+                            placeholder="場所を追加"
+                            value={location}
+                            onChange={e => setSchedule({ location: e.target.value })}
+                        />
                     </Grid>
                 </Grid>
                 <Grid container spacing={1} alignItems="center" justify="space-between">
@@ -43,7 +68,13 @@ const AddScheduleDialog = ({ }) => {
                         <NotesOutlined />
                     </Grid>
                     <Grid item xs={10}>
-                        <TextField style={spacer} fullWidth placeholder="説明を追加" />
+                        <TextField
+                            style={spacer}
+                            fullWidth
+                            placeholder="説明を追加"
+                            value={description}
+                            onChange={e => setSchedule({ description: e.target.value })}
+                        />
                     </Grid>
                 </Grid>
             </DialogContent>
