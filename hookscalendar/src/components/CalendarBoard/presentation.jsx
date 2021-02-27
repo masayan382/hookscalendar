@@ -5,7 +5,7 @@ import CalendarElement from "../CalendarElement";
 import * as styles from "./style.module.css";
 import { createCalendar } from "../../services/calendar";
 import { useSelector, useDispatch } from "react-redux"
-import { addScheduleOpenDialog, addScheduleCloseDialog } from "../../redux/addSchedule/actions";
+import { addScheduleOpenDialog, addScheduleCloseDialog, addScheduleSetValue } from "../../redux/addSchedule/actions";
 
 const days = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -14,8 +14,9 @@ const CalendarBoard = () => {
     const data = useSelector(state => state)
     const calendar = createCalendar(data.calendar);
     const month = data.calendar;
-    const openAddScheduleDialog = () => {
-        dispatch(addScheduleOpenDialog())
+    const openAddScheduleDialog = (d) => {
+        dispatch(addScheduleOpenDialog());
+        dispatch(addScheduleSetValue({ date: d }));
     };
     const closeDialog = () => {
         dispatch(addScheduleCloseDialog());
@@ -38,7 +39,7 @@ const CalendarBoard = () => {
                     </li>
                 ))}
                 {calendar.map(c => (
-                    <li key={c.toISOString()} onClick={() => openAddScheduleDialog()}>
+                    <li key={c.toISOString()} onClick={() => openAddScheduleDialog(c)}>
                         <CalendarElement day={c} month={month} />
                     </li>
                 ))}
