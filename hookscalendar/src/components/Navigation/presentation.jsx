@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IconButton, Toolbar, Typography, withStyles } from "@material-ui/core";
 import { DatePicker } from "@material-ui/pickers";
 import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
@@ -12,6 +12,8 @@ import {
     formatMonth
 } from "../../services/calendar";
 import { calendarSetMonth } from "../../redux/calendar/actions";
+import dayjs from "dayjs";
+
 
 const StyledToolbar = withStyles({
     root: { padding: "0" }
@@ -26,12 +28,12 @@ const StyledDatePicker = withStyles({
 })(DatePicker);
 
 const Navigation = () => {
+    const [selectedDate, handleDateChange] = useState(new Date());
 
     const dispatch = useDispatch();
     const data = useSelector(state => state.calendar)
 
     const month = getMonth(data);
-    console.log(month);
 
     const setNextMonth = () => {
         const nextMonth = getNextMonth(data);
@@ -43,10 +45,16 @@ const Navigation = () => {
         dispatch(calendarSetMonth(previousMonth))
     }
 
-    const setMonth = () => {
-        const setMonthForm = formatMonth(month);
-        dispatch(calendarSetMonth(setMonthForm))
-    };
+    // const setMonth = () => {
+    //     const setMonthForm = formatMonth(month);
+    //     dispatch(calendarSetMonth(setMonthForm))
+    // };
+
+    useEffect(() => {
+        const day = dayjs(selectedDate)
+        const dayFormat = formatMonth(day);
+        dispatch(calendarSetMonth(dayFormat));
+    }, [selectedDate]);
 
     return (
         <StyledToolbar>
@@ -65,7 +73,7 @@ const Navigation = () => {
             </IconButton>
             <StyledDatePicker
                 value={month}
-                onChange={() => { setMonth(); }}
+                onChange={handleDateChange}
                 variant="inline"
                 format="YYYY年 M月"
                 animateYearScrolling
