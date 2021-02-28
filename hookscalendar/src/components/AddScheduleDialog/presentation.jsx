@@ -18,6 +18,7 @@ import {
 } from "../../redux/addSchedule/actions";
 import { DatePicker } from "@material-ui/pickers";
 import * as styles from "./style.module.css";
+import { schedulesAddItem } from "../../redux/schedules/actions";
 
 const spacer = { margin: "4px 0" };
 
@@ -26,7 +27,12 @@ const Title = withStyles({
 })(Input);
 
 const AddScheduleDialog = ({ }) => {
+    const stateOrigin = useSelector(state => state);
+    console.log(stateOrigin);
     const state = useSelector(state => state.addSchedule);
+    // console.log(state);
+    const schedule = useSelector(state => state.schedules);
+    // console.log(schedule);
     const isDialogOpen = state.isDialogOpen
     const form = state.form;
     console.log(form);
@@ -36,11 +42,19 @@ const AddScheduleDialog = ({ }) => {
     const date = form.date;
 
     const dispatch = useDispatch();
+
     const closeDialog = () => {
         dispatch(addScheduleCloseDialog());
     }
     const setSchedule = (value) => {
+        console.log(`value:${value}`);
         dispatch(addScheduleSetValue(value));
+    }
+
+    const saveSchedule = () => {
+        dispatch(schedulesAddItem(form));
+        console.log(`${form}`);
+        dispatch(addScheduleCloseDialog());
     }
     return (
         <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="xs" fullWidth>
@@ -106,7 +120,7 @@ const AddScheduleDialog = ({ }) => {
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button color="primary" variant="outlined">
+                <Button color="primary" variant="outlined" onClick={saveSchedule}>
                     保存
         </Button>
             </DialogActions>
