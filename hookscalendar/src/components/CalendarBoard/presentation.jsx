@@ -6,14 +6,18 @@ import * as styles from "./style.module.css";
 import { createCalendar } from "../../services/calendar";
 import { useSelector, useDispatch } from "react-redux"
 import { addScheduleOpenDialog, addScheduleCloseDialog, addScheduleSetValue } from "../../redux/addSchedule/actions";
+import { setSchedules } from "../../services/schedule";
 
 const days = ["日", "月", "火", "水", "木", "金", "土"];
 
 const CalendarBoard = () => {
     const dispatch = useDispatch();
     const data = useSelector(state => state)
-    const calendar = createCalendar(data.calendar);
+    // const calendar = createCalendar(data.calendar);
     const month = data.calendar;
+    const schedules = data.schedules.items
+    const calendar = setSchedules(createCalendar(month), schedules);
+    console.log(calendar);
     const openAddScheduleDialog = (d) => {
         dispatch(addScheduleOpenDialog());
         dispatch(addScheduleSetValue({ date: d }));
@@ -38,9 +42,9 @@ const CalendarBoard = () => {
                         </Typography>
                     </li>
                 ))}
-                {calendar.map(c => (
-                    <li key={c.toISOString()} onClick={() => openAddScheduleDialog(c)}>
-                        <CalendarElement day={c} month={month} />
+                {calendar.map(({ date, schedules }) => (
+                    <li key={date.toISOString()} onClick={() => openAddScheduleDialog(date)}>
+                        <CalendarElement day={date} month={month} schedules={schedules} />
                     </li>
                 ))}
             </GridList>

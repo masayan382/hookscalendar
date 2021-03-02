@@ -28,14 +28,14 @@ const Title = withStyles({
 
 const AddScheduleDialog = ({ }) => {
     const stateOrigin = useSelector(state => state);
-    console.log(stateOrigin);
+    // console.log(stateOrigin);
     const state = useSelector(state => state.addSchedule);
     // console.log(state);
     const schedule = useSelector(state => state.schedules);
     // console.log(schedule);
     const isDialogOpen = state.isDialogOpen
     const form = state.form;
-    console.log(form);
+    // console.log(form);
     const title = form.title;
     const description = form.description;
     const location = form.location;
