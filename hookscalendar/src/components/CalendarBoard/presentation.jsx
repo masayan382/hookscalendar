@@ -17,7 +17,7 @@ const CalendarBoard = () => {
     const month = data.calendar;
     const schedules = data.schedules.items
     const calendar = setSchedules(createCalendar(month), schedules);
-    console.log(calendar);
+    // console.log("calendar:", calendar);
     const openAddScheduleDialog = (d) => {
         dispatch(addScheduleOpenDialog());
         dispatch(addScheduleSetValue({ date: d }));
