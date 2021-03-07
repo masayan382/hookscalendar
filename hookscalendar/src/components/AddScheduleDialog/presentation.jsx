@@ -38,14 +38,16 @@ const AddScheduleDialog = ({ }) => {
     const isDialogOpen = state.isDialogOpen
     const form = state.form;
     // console.log(form);
-    const title = form.title;
-    const description = form.description;
-    const location = form.location;
-    const date = form.date;
+    // const title = form.title;
+    // const description = form.description;
+    // const location = form.location;
+    // const date = form.date;
     // console.log("date:", date);
     const dispatch = useDispatch();
 
     const closeDialog = () => {
+        initDialog();
+        console.log('initDialog');
         dispatch(addScheduleCloseDialog());
     }
     const setSchedule = (value) => {
@@ -58,10 +60,7 @@ const AddScheduleDialog = ({ }) => {
         await postBase();
         console.log("postBase");
         await dispatch(addScheduleCloseDialog());
-        setInputTitle("");
-        handleDateChange(dayjs(new Date()));
-        setInputLocation("");
-        setinputDescription("");
+        initDialog();
     }
 
     const postBase = () => {
@@ -72,9 +71,16 @@ const AddScheduleDialog = ({ }) => {
             description: inputDescription,
         });
     }
+    const initDialog = () => {
+        setInputTitle("");
+        handleDateChange(dayjs(new Date()));
+        setInputLocation("");
+        setinputDescription("");
+    }
 
     const [inputTitle, setInputTitle] = useState("");
     const [selectedDate, handleDateChange] = useState(dayjs(new Date()));
+    console.log("selectedDate:", selectedDate.$d);
     const [inputLocation, setInputLocation] = useState("");
     const [inputDescription, setinputDescription] = useState("");
 
