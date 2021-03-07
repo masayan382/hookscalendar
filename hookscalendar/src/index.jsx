@@ -4,6 +4,8 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 
+import thunk from "redux-thunk";
+
 import DayjsUtils from "@date-io/dayjs";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 
@@ -12,14 +14,12 @@ import Navigation from "./components/Navigation/presentation"
 import AddScheduleDialog from "./components/AddScheduleDialog/presentation";
 import CurrentScheduleDialog from "./components/CurrentScheduleDialog/presentation";
 import rootReducer from "./redux/rootReducer";
-import thunk from 'redux-thunk'
 
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
 dayjs.locale("ja");
-const middlewares = [thunk];
 
-const store = createStore(rootReducer, applyMiddleware(...middlewares));
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const App = () => (
   <Provider store={store}>
