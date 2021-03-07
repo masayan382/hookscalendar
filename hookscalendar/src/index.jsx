@@ -10,6 +10,7 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import CalendarBoard from "./components/CalendarBoard/presentation";
 import Navigation from "./components/Navigation/presentation"
 import AddScheduleDialog from "./components/AddScheduleDialog/presentation";
+import CurrentScheduleDialog from "./components/CurrentScheduleDialog/presentation";
 import rootReducer from "./redux/rootReducer";
 import thunk from 'redux-thunk'
 
@@ -26,6 +27,7 @@ const App = () => (
       <Navigation />
       <CalendarBoard />
       <AddScheduleDialog />
+      <CurrentScheduleDialog />
     </MuiPickersUtilsProvider>
   </Provider>
 );

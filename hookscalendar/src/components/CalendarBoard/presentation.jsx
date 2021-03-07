@@ -7,6 +7,7 @@ import { createCalendar } from "../../services/calendar";
 import { useSelector, useDispatch } from "react-redux"
 import { addScheduleOpenDialog, addScheduleCloseDialog, addScheduleSetValue } from "../../redux/addSchedule/actions";
 import { setSchedules } from "../../services/schedule";
+import { currentScheduleSetItem, currentScheduleOpenDialog } from "../../redux/currentSchedule/actions";
 
 const days = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -24,6 +25,11 @@ const CalendarBoard = () => {
     };
     const closeDialog = () => {
         dispatch(addScheduleCloseDialog());
+    }
+    const openCurrentScheduleDialog = (schedule, e) => {
+        e.stopPropagation();
+        dispatch(currentScheduleSetItem(schedule));
+        dispatch(currentScheduleOpenDialog());
     }
 
     return (
@@ -44,7 +50,7 @@ const CalendarBoard = () => {
                 ))}
                 {calendar.map(({ date, schedules }) => (
                     <li key={date.toISOString()} onClick={() => openAddScheduleDialog(date)}>
-                        <CalendarElement day={date} month={month} schedules={schedules} />
+                        <CalendarElement day={date} month={month} schedules={schedules} onClickSchedule={openCurrentScheduleDialog} />
                     </li>
                 ))}
             </GridList>

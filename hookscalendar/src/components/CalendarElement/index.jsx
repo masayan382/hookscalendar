@@ -12,7 +12,7 @@ import {
 } from "../../services/calendar"
 import Schedule from "../Schedule/index";
 
-const CalendarElement = ({ day, month, schedules }) => {
+const CalendarElement = ({ day, month, schedules, ...props }) => {
 
     const currentMonth = getMonth(month);
     const isCurrentMonth = isSameMonth(day, currentMonth);
@@ -20,6 +20,7 @@ const CalendarElement = ({ day, month, schedules }) => {
     const format = isFirstDay(day) ? "M月D日" : "D";
     const today = dayjs();
     const isToday = isSameDay(day, today);
+    // console.log("props:", props);
 
     return (
         <div className={styles.element}>
@@ -36,7 +37,7 @@ const CalendarElement = ({ day, month, schedules }) => {
             </Typography>
             <div className={styles.schedules}>
                 {schedules.map(e => (
-                    <Schedule key={e.id} schedule={e} />
+                    <Schedule key={e.id} schedule={e} {...props} />
                 ))}
             </div>
         </div>
