@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux"
 import {
     Dialog,
@@ -18,9 +18,9 @@ import {
 } from "../../redux/addSchedule/actions";
 import { DatePicker } from "@material-ui/pickers";
 import * as styles from "./style.module.css";
-import { schedulesAddItem } from "../../redux/schedules/actions";
-import firebase from "firebase/app";
+// import { schedulesAddItem } from "../../redux/schedules/actions";
 import { db } from "../../firebase.js";
+import dayjs from 'dayjs';
 
 const spacer = { margin: "4px 0" };
 
@@ -30,7 +30,7 @@ const Title = withStyles({
 
 const AddScheduleDialog = ({ }) => {
     const stateOrigin = useSelector(state => state);
-    // console.log(stateOrigin);
+    // console.log("state:", stateOrigin);
     const state = useSelector(state => state.addSchedule);
     // console.log(state);
     const schedule = useSelector(state => state.schedules);
@@ -42,7 +42,7 @@ const AddScheduleDialog = ({ }) => {
     const description = form.description;
     const location = form.location;
     const date = form.date;
-
+    // console.log("date:", date);
     const dispatch = useDispatch();
 
     const closeDialog = () => {
@@ -53,20 +53,30 @@ const AddScheduleDialog = ({ }) => {
     }
 
     const saveSchedule = async () => {
-        console.log("saveSchedule:", form);
-        await dispatch(schedulesAddItem(form));
+        // console.log("saveSchedule:", form);
+        // await dispatch(schedulesAddItem(form));
         await postBase();
         console.log("postBase");
         await dispatch(addScheduleCloseDialog());
-
+        setInputTitle("");
+        handleDateChange(dayjs(new Date()));
+        setInputLocation("");
+        setinputDescription("");
     }
 
     const postBase = () => {
-        db.collection("post").doc("schedule").set({
-            // timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            form
+        db.collection("post").doc().set({
+            title: inputTitle,
+            date: selectedDate.$d,
+            location: inputLocation,
+            description: inputDescription,
         });
     }
+
+    const [inputTitle, setInputTitle] = useState("");
+    const [selectedDate, handleDateChange] = useState(dayjs(new Date()));
+    const [inputLocation, setInputLocation] = useState("");
+    const [inputDescription, setinputDescription] = useState("");
 
     return (
         <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="xs" fullWidth>
@@ -82,8 +92,8 @@ const AddScheduleDialog = ({ }) => {
                     autoFocus
                     fullWidth
                     placeholder="タイトルと日時を追加"
-                    value={title}
-                    onChange={e => setSchedule({ title: e.target.value })}
+                    value={inputTitle}
+                    onChange={e => setInputTitle(e.target.value)}
                 />
                 <Grid container spacing={1} alignItems="center" justify="space-between">
                     <Grid item>
@@ -91,8 +101,8 @@ const AddScheduleDialog = ({ }) => {
                     </Grid>
                     <Grid item xs={10}>
                         <DatePicker
-                            value={date}
-                            onChange={d => setSchedule({ date: d })}
+                            value={selectedDate}
+                            onChange={handleDateChange}
                             variant="inline"
                             format="YYYY年M月D日"
                             animateYearScrolling
@@ -111,8 +121,8 @@ const AddScheduleDialog = ({ }) => {
                             style={spacer}
                             fullWidth
                             placeholder="場所を追加"
-                            value={location}
-                            onChange={e => setSchedule({ location: e.target.value })}
+                            value={inputLocation}
+                            onChange={e => setInputLocation(e.target.value)}
                         />
                     </Grid>
                 </Grid>
@@ -125,8 +135,8 @@ const AddScheduleDialog = ({ }) => {
                             style={spacer}
                             fullWidth
                             placeholder="説明を追加"
-                            value={description}
-                            onChange={e => setSchedule({ description: e.target.value })}
+                            value={inputDescription}
+                            onChange={e => setinputDescription(e.target.value)}
                         />
                     </Grid>
                 </Grid>
@@ -134,7 +144,7 @@ const AddScheduleDialog = ({ }) => {
             <DialogActions>
                 <Button color="primary" variant="outlined" onClick={saveSchedule}>
                     保存
-        </Button>
+                </Button>
             </DialogActions>
         </Dialog>
     );
