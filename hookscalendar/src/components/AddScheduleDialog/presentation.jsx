@@ -19,6 +19,8 @@ import {
 import { DatePicker } from "@material-ui/pickers";
 import * as styles from "./style.module.css";
 import { schedulesAddItem } from "../../redux/schedules/actions";
+import firebase from "firebase/app";
+import { db } from "../../firebase.js";
 
 const spacer = { margin: "4px 0" };
 
@@ -47,15 +49,25 @@ const AddScheduleDialog = ({ }) => {
         dispatch(addScheduleCloseDialog());
     }
     const setSchedule = (value) => {
-        console.log(`value:${value}`);
         dispatch(addScheduleSetValue(value));
     }
 
-    const saveSchedule = () => {
-        dispatch(schedulesAddItem(form));
-        console.log(`${form}`);
-        dispatch(addScheduleCloseDialog());
+    const saveSchedule = async () => {
+        console.log("saveSchedule:", form);
+        await dispatch(schedulesAddItem(form));
+        await postBase();
+        console.log("postBase");
+        await dispatch(addScheduleCloseDialog());
+
     }
+
+    const postBase = () => {
+        db.collection("post").doc("schedule").set({
+            // timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            form
+        });
+    }
+
     return (
         <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="xs" fullWidth>
             <DialogActions>
