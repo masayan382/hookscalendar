@@ -30,7 +30,6 @@ const StyledDatePicker = withStyles({
 
 const Navigation = () => {
     const [selectedDate, handleDateChange] = useState(new Date());
-
     const dispatch = useDispatch();
     const data = useSelector(state => state.calendar)
 
@@ -39,11 +38,13 @@ const Navigation = () => {
     const setNextMonth = () => {
         const nextMonth = getNextMonth(data);
         dispatch(calendarSetMonth(nextMonth));
+        fetchItem(nextMonth);
     }
 
     const setPreviousMonth = () => {
         const previousMonth = getPreviousMonth(data);
         dispatch(calendarSetMonth(previousMonth));
+        fetchItem(previousMonth);
     }
 
     // const setMonth = () => {
