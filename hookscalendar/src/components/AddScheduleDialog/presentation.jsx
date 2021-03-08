@@ -47,7 +47,7 @@ const AddScheduleDialog = ({ }) => {
 
     const closeDialog = () => {
         initDialog();
-        console.log('initDialog');
+        // console.log('initDialog');
         dispatch(addScheduleCloseDialog());
     }
     const setSchedule = (value) => {
@@ -58,7 +58,7 @@ const AddScheduleDialog = ({ }) => {
         // console.log("saveSchedule:", form);
         // await dispatch(schedulesAddItem(form));
         await postBase();
-        console.log("postBase");
+        // console.log("postBase");
         await dispatch(addScheduleCloseDialog());
         initDialog();
     }
@@ -80,7 +80,7 @@ const AddScheduleDialog = ({ }) => {
 
     const [inputTitle, setInputTitle] = useState("");
     const [selectedDate, handleDateChange] = useState(dayjs(new Date()));
-    console.log("selectedDate:", selectedDate.$d);
+    // console.log("selectedDate:", selectedDate.$d);
     const [inputLocation, setInputLocation] = useState("");
     const [inputDescription, setinputDescription] = useState("");
 

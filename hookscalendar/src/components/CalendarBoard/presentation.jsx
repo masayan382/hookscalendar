@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { GridList, Typography } from "@material-ui/core";
 
 import CalendarElement from "../CalendarElement";
@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { addScheduleOpenDialog, addScheduleCloseDialog, addScheduleSetValue } from "../../redux/addSchedule/actions";
 import { setSchedules } from "../../services/schedule";
 import { currentScheduleSetItem, currentScheduleOpenDialog } from "../../redux/currentSchedule/actions";
+import { asyncSchedulesFetchItem } from "../../redux/schedules/effects";
 
 const days = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -31,6 +32,14 @@ const CalendarBoard = () => {
         dispatch(currentScheduleSetItem(schedule));
         dispatch(currentScheduleOpenDialog());
     }
+
+    const fetchSchedule = (month) => {
+        dispatch(asyncSchedulesFetchItem(month));
+    };
+
+    useEffect(() => {
+        fetchSchedule();
+    }, []);
 
     return (
         <div className={styles.container}>

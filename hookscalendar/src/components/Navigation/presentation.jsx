@@ -13,6 +13,7 @@ import {
 } from "../../services/calendar";
 import { calendarSetMonth } from "../../redux/calendar/actions";
 import dayjs from "dayjs";
+import { asyncSchedulesFetchItem } from "../../redux/schedules/effects";
 
 
 const StyledToolbar = withStyles({
@@ -42,13 +43,17 @@ const Navigation = () => {
 
     const setPreviousMonth = () => {
         const previousMonth = getPreviousMonth(data);
-        dispatch(calendarSetMonth(previousMonth))
+        dispatch(calendarSetMonth(previousMonth));
     }
 
     // const setMonth = () => {
     //     const setMonthForm = formatMonth(month);
     //     dispatch(calendarSetMonth(setMonthForm))
     // };
+
+    const fetchItem = (month) => {
+        dispatch(asyncSchedulesFetchItem(month));
+    }
 
     useEffect(() => {
         const day = dayjs(selectedDate)
