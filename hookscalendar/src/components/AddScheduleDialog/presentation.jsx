@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux"
 import {
     Dialog,
@@ -32,7 +32,8 @@ const AddScheduleDialog = ({ }) => {
     const stateOrigin = useSelector(state => state);
     // console.log("state:", stateOrigin);
     const state = useSelector(state => state.addSchedule);
-    // console.log(state);
+    const addedSchedule = useSelector(state => state.addSchedule.form.date);
+    // console.log("addedSchedule", addedSchedule);
     const schedule = useSelector(state => state.schedules);
     // console.log(schedule);
     const isDialogOpen = state.isDialogOpen
@@ -84,11 +85,15 @@ const AddScheduleDialog = ({ }) => {
     }
 
     const [inputTitle, setInputTitle] = useState("");
-    const [selectedDate, handleDateChange] = useState(dayjs(new Date()));
+    const [selectedDate, handleDateChange] = useState(addedSchedule);
     // console.log("selectedDate:", selectedDate);
 
     const [inputLocation, setInputLocation] = useState("");
     const [inputDescription, setinputDescription] = useState("");
+
+    useEffect(() => {
+        handleDateChange(addedSchedule);
+    }, [addedSchedule]);
 
     return (
         <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="xs" fullWidth>
