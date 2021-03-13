@@ -19,7 +19,7 @@ import {
 import { DatePicker } from "@material-ui/pickers";
 import * as styles from "./style.module.css";
 // import { schedulesAddItem } from "../../redux/schedules/actions";
-import { db } from "../../firebase.js";
+import { db, FirebaseTimestamp } from "../../firebase.js";
 import dayjs from 'dayjs';
 
 const spacer = { margin: "4px 0" };
@@ -64,12 +64,17 @@ const AddScheduleDialog = ({ }) => {
     }
 
     const postBase = () => {
-        db.collection("post").doc().set({
+        const timestamp = FirebaseTimestamp.now();
+        const postData = {
             title: inputTitle,
-            date: selectedDate.$d,
+            selectDate: selectedDate.$d,
             location: inputLocation,
             description: inputDescription,
-        });
+            createdAt: timestamp,
+        };
+        db.collection(`${selectedDate.$y}`).doc(`${selectedDate.$M + 1}`).collection(`${selectedDate.$D}`).doc().set(postData).catch((error) => {
+            throw new Error(error);
+        });;
     }
     const initDialog = () => {
         setInputTitle("");
@@ -80,7 +85,8 @@ const AddScheduleDialog = ({ }) => {
 
     const [inputTitle, setInputTitle] = useState("");
     const [selectedDate, handleDateChange] = useState(dayjs(new Date()));
-    // console.log("selectedDate:", selectedDate.$d);
+    // console.log("selectedDate:", selectedDate);
+
     const [inputLocation, setInputLocation] = useState("");
     const [inputDescription, setinputDescription] = useState("");
 

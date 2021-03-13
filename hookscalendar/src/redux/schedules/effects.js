@@ -16,7 +16,7 @@ export const asyncSchedulesFetchItem = () => async (dispatch) => {
                 const data = snapshot.data();
                 list.push(data);
             });
-        })
-        .then(console.log("list:", list));
+        });
+    // .then(console.log("list:", list));
     dispatch(schedulesFetchItem(formatedSchedule));
 };

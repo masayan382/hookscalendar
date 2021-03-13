@@ -30,8 +30,10 @@ const StyledDatePicker = withStyles({
 
 const Navigation = () => {
     const [selectedDate, handleDateChange] = useState(new Date());
+    console.log('navi:', selectedDate.$d)
     const dispatch = useDispatch();
     const data = useSelector(state => state.calendar)
+    console.log("navidata:", data);
 
     const month = getMonth(data);
 
