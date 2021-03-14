@@ -21,9 +21,11 @@ import * as styles from "./style.module.css";
 // import { schedulesAddItem } from "../../redux/schedules/actions";
 import {
     db,
-    // FirebaseTimestamp
+    FirebaseTimestamp
 } from "../../firebase.js";
 import dayjs from 'dayjs';
+import { formatSchedule } from "../../services/schedule";
+import { schedulesAddItem } from "../../redux/schedules/actions"
 
 const spacer = { margin: "4px 0" };
 
@@ -40,7 +42,6 @@ const AddScheduleDialog = ({ }) => {
 
     const closeDialog = () => {
         initDialog();
-        // console.log('initDialog');
         dispatch(addScheduleCloseDialog());
     }
     // const setSchedule = (value) => {
@@ -53,18 +54,21 @@ const AddScheduleDialog = ({ }) => {
         initDialog();
     }
 
-    const postBase = () => {
-        // const timestamp = FirebaseTimestamp.now();
+    const postBase = async () => {
+        const timestamp = FirebaseTimestamp.now();
         const postData = {
             title: inputTitle,
             date: selectedDate.$d,
             location: inputLocation,
             description: inputDescription,
-            // createdAt: timestamp,
+            createdAt: timestamp,
         };
-        db.collection('post').doc(`${selectedDate.$y}`).collection(`${selectedDate.$M + 1}`).doc(`${selectedDate.$D}`).set(postData).catch((error) => {
+        await db.collection('post').doc(`${selectedDate.$y}`).collection(`${selectedDate.$M + 1}`).doc(`${selectedDate.$D}`).set(postData).catch((error) => {
             throw new Error(error);
-        });;
+        });
+        const newSchedule = formatSchedule(postData);
+        // console.log("newSchedule:", newSchedule);
+        dispatch(schedulesAddItem(newSchedule));
     }
 
     const initDialog = () => {
