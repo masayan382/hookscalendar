@@ -14,12 +14,15 @@ import { LocationOnOutlined, NotesOutlined, AccessTime, Close } from "@material-
 import { withStyles } from "@material-ui/styles";
 import {
     addScheduleCloseDialog,
-    addScheduleSetValue
+    // addScheduleSetValue
 } from "../../redux/addSchedule/actions";
 import { DatePicker } from "@material-ui/pickers";
 import * as styles from "./style.module.css";
 // import { schedulesAddItem } from "../../redux/schedules/actions";
-import { db, FirebaseTimestamp } from "../../firebase.js";
+import {
+    db,
+    // FirebaseTimestamp
+} from "../../firebase.js";
 import dayjs from 'dayjs';
 
 const spacer = { margin: "4px 0" };
@@ -29,15 +32,15 @@ const Title = withStyles({
 })(Input);
 
 const AddScheduleDialog = ({ }) => {
-    const stateOrigin = useSelector(state => state);
+    // const stateOrigin = useSelector(state => state);
     // console.log("state:", stateOrigin);
     const state = useSelector(state => state.addSchedule);
     const addedSchedule = useSelector(state => state.addSchedule.form.date);
     // console.log("addedSchedule", addedSchedule);
-    const schedule = useSelector(state => state.schedules);
+    // const schedule = useSelector(state => state.schedules);
     // console.log(schedule);
     const isDialogOpen = state.isDialogOpen
-    const form = state.form;
+    // const form = state.form;
     // console.log(form);
     // const title = form.title;
     // const description = form.description;
@@ -51,9 +54,9 @@ const AddScheduleDialog = ({ }) => {
         // console.log('initDialog');
         dispatch(addScheduleCloseDialog());
     }
-    const setSchedule = (value) => {
-        dispatch(addScheduleSetValue(value));
-    }
+    // const setSchedule = (value) => {
+    //     dispatch(addScheduleSetValue(value));
+    // }
 
     const saveSchedule = async () => {
         // console.log("saveSchedule:", form);
@@ -65,18 +68,19 @@ const AddScheduleDialog = ({ }) => {
     }
 
     const postBase = () => {
-        const timestamp = FirebaseTimestamp.now();
+        // const timestamp = FirebaseTimestamp.now();
         const postData = {
             title: inputTitle,
             selectDate: selectedDate.$d,
             location: inputLocation,
             description: inputDescription,
-            createdAt: timestamp,
+            // createdAt: timestamp,
         };
-        db.collection(`${selectedDate.$y}`).doc(`${selectedDate.$M + 1}`).collection(`${selectedDate.$D}`).doc().set(postData).catch((error) => {
+        db.collection('post').doc(`${selectedDate.$y}`).collection(`${selectedDate.$M + 1}`).doc(`${selectedDate.$D}`).set(postData).catch((error) => {
             throw new Error(error);
         });;
     }
+
     const initDialog = () => {
         setInputTitle("");
         handleDateChange(dayjs(new Date()));

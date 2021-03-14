@@ -8,7 +8,11 @@ import { useSelector, useDispatch } from "react-redux"
 import { addScheduleOpenDialog, addScheduleCloseDialog, addScheduleSetValue } from "../../redux/addSchedule/actions";
 import { setSchedules } from "../../services/schedule";
 import { currentScheduleSetItem, currentScheduleOpenDialog } from "../../redux/currentSchedule/actions";
-import { asyncSchedulesFetchItem } from "../../redux/schedules/effects";
+// import { asyncSchedulesFetchItem } from "../../redux/schedules/effects";
+import { schedulesSetLoading, schedulesFetchItem } from "../../redux/schedules/actions";
+import { formatSchedule } from "../../services/schedule";
+import { db } from "../../firebase";
+// import dayjs from "dayjs";
 
 const days = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -17,6 +21,7 @@ const CalendarBoard = () => {
     const data = useSelector(state => state)
     // const calendar = createCalendar(data.calendar);
     const month = data.calendar;
+    // console.log("month:", month);
     const schedules = data.schedules.items
     const calendar = setSchedules(createCalendar(month), schedules);
     // console.log("calendar:", calendar);
@@ -24,9 +29,9 @@ const CalendarBoard = () => {
         dispatch(addScheduleOpenDialog());
         dispatch(addScheduleSetValue({ date: d }));
     };
-    const closeDialog = () => {
-        dispatch(addScheduleCloseDialog());
-    }
+    // const closeDialog = () => {
+    //     dispatch(addScheduleCloseDialog());
+    // }
     const openCurrentScheduleDialog = (schedule, e) => {
         e.stopPropagation();
         dispatch(currentScheduleSetItem(schedule));
@@ -35,6 +40,29 @@ const CalendarBoard = () => {
 
     const fetchSchedule = (month) => {
         dispatch(asyncSchedulesFetchItem(month));
+    };
+
+    const asyncSchedulesFetchItem = () => async (dispatch) => {
+        dispatch(schedulesSetLoading());
+        const list = [];
+        await db
+            .collection(`post`)
+            .doc(`${month.year}`)
+            .collection(`${month.month}`)
+            .get()
+            .then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    const postData = doc.data();
+                    // console.log("postData:", postData);
+                    const timestamp = postData.selectDate.toDate();
+                    const newSelectDate = { selectDate: timestamp };
+                    const newPostData = Object.assign(postData, newSelectDate);
+                    list.push(newPostData);
+                });
+            });
+        console.log("list:", list);
+        const formatedSchedule = list.map((r) => formatSchedule(r));
+        dispatch(schedulesFetchItem(formatedSchedule));
     };
 
     useEffect(() => {
