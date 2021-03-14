@@ -1,22 +1,29 @@
 import { schedulesSetLoading, schedulesFetchItem } from "./actions";
 import { formatSchedule } from "../../services/schedule";
 import { db } from "../../firebase";
+import dayjs from "dayjs";
 
 export const asyncSchedulesFetchItem = () => async (dispatch) => {
     dispatch(schedulesSetLoading());
 
     // const result = await get(`schedules?month=${month}&year=${year}`);
     const list = [];
-    const formatedSchedule = list.map((r) => formatSchedule(r));
+
     const getPost = await db
-        .collection("post")
+        .collection(`2021`)
+        .doc(`3`)
+        .collection("20")
         .get()
-        .then((snapshots) => {
-            snapshots.forEach((snapshot) => {
-                const data = snapshot.data();
-                list.push(data);
+        .then((snapshot) => {
+            snapshot.forEach((doc) => {
+                const postData = doc.data();
+                const timestamp = postData.selectDate.toDate();
+                const newSelectDate = { selectDate: timestamp };
+                const newPostData = Object.assign(postData, newSelectDate);
+                list.push(newPostData);
             });
         });
-    // .then(console.log("list:", list));
+    console.log("list:", list);
+    const formatedSchedule = list.map((r) => formatSchedule(r));
     dispatch(schedulesFetchItem(formatedSchedule));
 };
