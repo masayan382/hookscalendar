@@ -13,7 +13,10 @@ import {
 } from "../../services/calendar";
 import { calendarSetMonth } from "../../redux/calendar/actions";
 import dayjs from "dayjs";
-import { asyncSchedulesFetchItem } from "../../redux/schedules/effects";
+import { schedulesSetLoading, schedulesFetchItem } from "../../redux/schedules/actions";
+import { formatSchedule } from "../../services/schedule";
+import { db } from "../../firebase";
+// import { asyncSchedulesFetchItem } from "../../redux/schedules/effects";
 
 
 const StyledToolbar = withStyles({
@@ -57,6 +60,29 @@ const Navigation = () => {
     const fetchItem = (month) => {
         dispatch(asyncSchedulesFetchItem(month));
     }
+
+    const asyncSchedulesFetchItem = () => async (dispatch) => {
+        dispatch(schedulesSetLoading());
+        const list = [];
+        await db
+            .collection(`post`)
+            .doc(`${month.year}`)
+            .collection(`${month.month}`)
+            .get()
+            .then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    const postData = doc.data();
+                    // console.log("postData:", postData);
+                    const timestamp = postData.date.toDate();
+                    const newSelectDate = { date: timestamp };
+                    const newPostData = Object.assign(postData, newSelectDate);
+                    list.push(newPostData);
+                });
+            });
+        console.log("list:", list);
+        const formatedSchedule = list.map((r) => formatSchedule(r));
+        dispatch(schedulesFetchItem(formatedSchedule));
+    };
 
     useEffect(() => {
         const day = dayjs(selectedDate)

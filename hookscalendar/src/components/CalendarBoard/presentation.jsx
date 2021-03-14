@@ -1,11 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { GridList, Typography } from "@material-ui/core";
 
 import CalendarElement from "../CalendarElement";
 import * as styles from "./style.module.css";
 import { createCalendar } from "../../services/calendar";
 import { useSelector, useDispatch } from "react-redux"
-import { addScheduleOpenDialog, addScheduleCloseDialog, addScheduleSetValue } from "../../redux/addSchedule/actions";
+import {
+    addScheduleOpenDialog,
+    // addScheduleCloseDialog,
+    addScheduleSetValue
+} from "../../redux/addSchedule/actions";
 import { setSchedules } from "../../services/schedule";
 import { currentScheduleSetItem, currentScheduleOpenDialog } from "../../redux/currentSchedule/actions";
 // import { asyncSchedulesFetchItem } from "../../redux/schedules/effects";
@@ -18,11 +22,14 @@ const days = ["日", "月", "火", "水", "木", "金", "土"];
 
 const CalendarBoard = () => {
     const dispatch = useDispatch();
+
+
     const data = useSelector(state => state)
-    // const calendar = createCalendar(data.calendar);
+    // console.log("state", data);
     const month = data.calendar;
     // console.log("month:", month);
     const schedules = data.schedules.items
+    // console.log("schedules:", schedules);
     const calendar = setSchedules(createCalendar(month), schedules);
     // console.log("calendar:", calendar);
     const openAddScheduleDialog = (d) => {
@@ -54,8 +61,8 @@ const CalendarBoard = () => {
                 snapshot.forEach((doc) => {
                     const postData = doc.data();
                     // console.log("postData:", postData);
-                    const timestamp = postData.selectDate.toDate();
-                    const newSelectDate = { selectDate: timestamp };
+                    const timestamp = postData.date.toDate();
+                    const newSelectDate = { date: timestamp };
                     const newPostData = Object.assign(postData, newSelectDate);
                     list.push(newPostData);
                 });

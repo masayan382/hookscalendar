@@ -32,21 +32,10 @@ const Title = withStyles({
 })(Input);
 
 const AddScheduleDialog = ({ }) => {
-    // const stateOrigin = useSelector(state => state);
-    // console.log("state:", stateOrigin);
     const state = useSelector(state => state.addSchedule);
+    // console.log("addSchedule", state);
     const addedSchedule = useSelector(state => state.addSchedule.form.date);
-    // console.log("addedSchedule", addedSchedule);
-    // const schedule = useSelector(state => state.schedules);
-    // console.log(schedule);
     const isDialogOpen = state.isDialogOpen
-    // const form = state.form;
-    // console.log(form);
-    // const title = form.title;
-    // const description = form.description;
-    // const location = form.location;
-    // const date = form.date;
-    // console.log("date:", date);
     const dispatch = useDispatch();
 
     const closeDialog = () => {
@@ -59,10 +48,7 @@ const AddScheduleDialog = ({ }) => {
     // }
 
     const saveSchedule = async () => {
-        // console.log("saveSchedule:", form);
-        // await dispatch(schedulesAddItem(form));
         await postBase();
-        // console.log("postBase");
         await dispatch(addScheduleCloseDialog());
         initDialog();
     }
@@ -71,7 +57,7 @@ const AddScheduleDialog = ({ }) => {
         // const timestamp = FirebaseTimestamp.now();
         const postData = {
             title: inputTitle,
-            selectDate: selectedDate.$d,
+            date: selectedDate.$d,
             location: inputLocation,
             description: inputDescription,
             // createdAt: timestamp,
