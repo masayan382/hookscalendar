@@ -60,7 +60,7 @@ const CalendarBoard = () => {
             .then((snapshot) => {
                 snapshot.forEach((doc) => {
                     const postData = doc.data();
-                    // console.log("postData:", postData);
+                    console.log("postData:", postData);
                     const timestamp = postData.date.toDate();
                     const newSelectDate = { date: timestamp };
                     const newPostData = Object.assign(postData, newSelectDate);

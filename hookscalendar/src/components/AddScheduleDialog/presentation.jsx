@@ -63,7 +63,11 @@ const AddScheduleDialog = ({ }) => {
             description: inputDescription,
             createdAt: timestamp,
         };
-        await db.collection('post').doc(`${selectedDate.$y}`).collection(`${selectedDate.$M + 1}`).doc(`${selectedDate.$D}`).set(postData).catch((error) => {
+        const postDataRef = db.collection('post').doc(`${selectedDate.$y}`).collection(`${selectedDate.$M + 1}`);
+        const ref = postDataRef.doc();
+        const id = ref.id
+        postData.id = id;
+        await postDataRef.doc(id).set(postData).catch((error) => {
             throw new Error(error);
         });
         const newSchedule = formatSchedule(postData);
