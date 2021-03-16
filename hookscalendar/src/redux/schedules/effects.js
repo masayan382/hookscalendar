@@ -1,5 +1,5 @@
 import {
-    // schedulesSetLoading,
+    schedulesSetLoading,
     // schedulesFetchItem,
     schedulesDeleteItem,
 } from "./actions";
@@ -29,25 +29,45 @@ import dayjs from "dayjs";
 //     dispatch(schedulesFetchItem(formatedSchedule));
 // };
 
-export const deleteRequest = async () => {
-    await db
-        .collection("post")
-        .doc(`${selectedDate.$y}`)
-        .collection(`${selectedDate.$M + 1}`)
-        .doc(`${selectedDate.$D}`)
-        .delete()
-        .catch((error) => {
-            throw new Error(error);
-        });
-};
+// export const deleteRequest = async () => {
+//     await db
+//         .collection("post")
+//         .doc(`${selectedDate.$y}`)
+//         .collection(`${selectedDate.$M + 1}`)
+//         .doc(`${selectedDate.$D}`)
+//         .delete()
+//         .catch((error) => {
+//             throw new Error(error);
+//         });
+// };
 
-export const asyncSchedulesDeleteItem = (id) => async (dispatch, getState) => {
-    dispatch(schedulesSetLoading());
-    const currentSchedules = getState().schedules.items;
+// export const asyncSchedulesDeleteItem = (id) => async (dispatch, getState) => {
+//     dispatch(schedulesSetLoading());
+//     const currentSchedules = getState().schedules.items;
+//     console.log("currentSchedules:", currentSchedules);
+//     const deleteYear = currentSchedules[0].date.$y;
+//     console.log("dYear:", deleteYear);
+//     const deleteMonth = currentSchedules[0].date.$M + 1;
+//     console.log("dMonth:", deleteMonth);
 
-    await deleteRequest();
+//     const deleteId = currentSchedules[0].id;
+//     console.log("dId:", deleteId);
 
-    // 成功したらローカルのstateを削除
-    const newSchedules = currentSchedules.filter((s) => s.id !== id);
-    dispatch(schedulesDeleteItem(newSchedules));
-};
+//     await db
+//         .collection("post")
+//         .doc(deleteYear)
+//         .collection(deleteMonth)
+//         .doc(deleteId)
+//         .delete()
+//         .then(() => {
+//             console.log("deleted!");
+//         })
+//         .catch((error) => {
+//             throw new Error(error);
+//         });
+
+//     // 成功したらローカルのstateを削除
+//     const newSchedules = currentSchedules.filter((s) => s.id !== id);
+//     console.log("newSchedules:", newSchedules);
+//     dispatch(schedulesDeleteItem(newSchedules));
+// };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Dialog,
     DialogContent,
@@ -12,6 +12,11 @@ import { Close, LocationOnOutlined, NotesOutlined, DeleteOutlineOutlined } from 
 import styles from "./style.module.css";
 import { currentScheduleCloseDialog } from "../../redux/currentSchedule/actions";
 import { useSelector, useDispatch } from "react-redux"
+import {
+    schedulesSetLoading,
+    schedulesDeleteItem,
+} from "../../redux/schedules/actions";
+import { db } from "../../firebase";
 
 const spacer = (top, bottom) => ({
     margin: `${top}px 0 ${bottom}px 0`
@@ -29,12 +34,49 @@ const CurrentScheduleDialog = () => {
     const isDialogOpen = state.currentSchedule.isDialogOpen;
     // console.log("isDialogOpen:", isDialogOpen);
     const item = schedule.item;
-    // console.log("item:", item);
+
+    const [id, setId] = useState("");
+
+    console.log("item:", item);
+
+    const asyncSchedulesDeleteItem = (id) => async (dispatch, getState) => {
+        dispatch(schedulesSetLoading());
+        const currentSchedules = getState().schedules.items;
+        console.log("currentSchedules:", currentSchedules);
+        const deleteYear = currentSchedules[0].date.$y;
+        // console.log("dYear:", deleteYear);
+        const deleteMonth = currentSchedules[0].date.$M + 1;
+        // console.log("dMonth:", deleteMonth);
+        const deleteId = currentSchedules[0].id;
+        console.log("dId:", deleteId);
+
+        await db
+            .collection("post")
+            .doc(`${deleteYear}`)
+            .collection(`${deleteMonth}`)
+            .doc(`${deleteId}`)
+            .delete()
+            .then(() => {
+                console.log("deleted!");
+            })
+            .catch((error) => {
+                throw new Error(error);
+            });
+        const newSchedules = currentSchedules.filter((s) => s[0].id !== deleteId);
+        console.log("newSchedules:", newSchedules);
+        dispatch(schedulesDeleteItem(newSchedules));
+    };
+
+    const deleteItem = (id) => {
+        setId(item.id);
+        dispatch(asyncSchedulesDeleteItem(id));
+        dispatch(currentScheduleCloseDialog());
+    };
     return (
         <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="xs" fullWidth>
             <DialogActions>
                 <div className={styles.closeButton}>
-                    <IconButton size="small">
+                    <IconButton size="small" onClick={deleteItem}>
                         <DeleteOutlineOutlined />
                     </IconButton>
                     <IconButton onClick={closeDialog} size="small">
