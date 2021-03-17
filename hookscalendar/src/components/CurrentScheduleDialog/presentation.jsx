@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Dialog,
     DialogContent,
@@ -35,48 +35,53 @@ const CurrentScheduleDialog = () => {
     // console.log("isDialogOpen:", isDialogOpen);
     const item = schedule.item;
 
-    const [id, setId] = useState("");
+    const [id, setId] = useState(null);
 
     console.log("item:", item);
 
     const asyncSchedulesDeleteItem = (id) => async (dispatch, getState) => {
         dispatch(schedulesSetLoading());
+        console.log("引数id:", id);
         const currentSchedules = getState().schedules.items;
         console.log("currentSchedules:", currentSchedules);
         const deleteYear = currentSchedules[0].date.$y;
-        // console.log("dYear:", deleteYear);
+        console.log("dYear:", deleteYear);
         const deleteMonth = currentSchedules[0].date.$M + 1;
-        // console.log("dMonth:", deleteMonth);
-        const deleteId = currentSchedules[0].id;
-        console.log("dId:", deleteId);
+        console.log("dMonth:", deleteMonth);
 
         await db
             .collection("post")
             .doc(`${deleteYear}`)
             .collection(`${deleteMonth}`)
-            .doc(`${deleteId}`)
+            .doc(`${id}`)
             .delete()
-            .then(() => {
-                console.log("deleted!");
-            })
             .catch((error) => {
                 throw new Error(error);
             });
-        const newSchedules = currentSchedules.filter((s) => s[0].id !== deleteId);
+        const newSchedules = currentSchedules.filter((s) => s.id !== id);
         console.log("newSchedules:", newSchedules);
         dispatch(schedulesDeleteItem(newSchedules));
     };
 
     const deleteItem = (id) => {
-        setId(item.id);
+        console.log("deleteItem-id:", id);
         dispatch(asyncSchedulesDeleteItem(id));
         dispatch(currentScheduleCloseDialog());
     };
+
+    useEffect(() => {
+        if (item !== null) {
+            setId(item.id);
+        } else {
+            setId(null);
+        }
+    }, [item]);
+
     return (
         <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="xs" fullWidth>
             <DialogActions>
                 <div className={styles.closeButton}>
-                    <IconButton size="small" onClick={deleteItem}>
+                    <IconButton size="small" onClick={() => deleteItem(id)}>
                         <DeleteOutlineOutlined />
                     </IconButton>
                     <IconButton onClick={closeDialog} size="small">
