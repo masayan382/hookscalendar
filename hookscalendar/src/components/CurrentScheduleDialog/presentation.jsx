@@ -25,20 +25,14 @@ const spacer = (top, bottom) => ({
 const CurrentScheduleDialog = () => {
     const dispatch = useDispatch();
     const state = useSelector(state => state);
-    // console.log("state:", state);
     const schedule = state.currentSchedule;
-    // console.log("schedule:", schedule);
     const closeDialog = () => {
         dispatch(currentScheduleCloseDialog());
     }
     const isDialogOpen = state.currentSchedule.isDialogOpen;
-    // console.log("isDialogOpen:", isDialogOpen);
     const item = schedule.item;
 
     const [id, setId] = useState(null);
-
-    console.log("item:", item);
-
     const asyncSchedulesDeleteItem = (id) => async (dispatch, getState) => {
         dispatch(schedulesSetLoading());
         console.log("引数id:", id);
@@ -64,7 +58,6 @@ const CurrentScheduleDialog = () => {
     };
 
     const deleteItem = (id) => {
-        console.log("deleteItem-id:", id);
         dispatch(asyncSchedulesDeleteItem(id));
         dispatch(currentScheduleCloseDialog());
     };
