@@ -77,7 +77,7 @@ const CurrentScheduleDialog = () => {
             <DialogActions>
                 <div className={styles.closeButton}>
                     <Tooltip title="削除" placement="bottom">
-                        <IconButton onClick={deleteItem} size="small">
+                        <IconButton onClick={() => deleteItem(id)} size="small">
                             <DeleteOutlineOutlined />
                         </IconButton>
                     </Tooltip>
