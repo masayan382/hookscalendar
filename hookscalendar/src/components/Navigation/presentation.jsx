@@ -33,11 +33,8 @@ const StyledDatePicker = withStyles({
 
 const Navigation = () => {
     const [selectedDate, handleDateChange] = useState(new Date());
-    // console.log('navi:', selectedDate.$d)
     const dispatch = useDispatch();
     const data = useSelector(state => state.calendar)
-    // console.log("navidata:", data);
-
     const month = getMonth(data);
 
     const setNextMonth = () => {
@@ -72,14 +69,12 @@ const Navigation = () => {
             .then((snapshot) => {
                 snapshot.forEach((doc) => {
                     const postData = doc.data();
-                    // console.log("postData:", postData);
                     const timestamp = postData.date.toDate();
                     const newSelectDate = { date: timestamp };
                     const newPostData = Object.assign(postData, newSelectDate);
                     list.push(newPostData);
                 });
             });
-        console.log("list:", list);
         const formatedSchedule = list.map((r) => formatSchedule(r));
         dispatch(schedulesFetchItem(formatedSchedule));
     };

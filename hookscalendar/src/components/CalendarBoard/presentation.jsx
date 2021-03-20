@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux"
 import { GridList, Typography } from "@material-ui/core";
-
 import CalendarElement from "../CalendarElement";
 import * as styles from "./style.module.css";
 import { createCalendar } from "../../services/calendar";
-import { useSelector, useDispatch } from "react-redux"
 import {
     addScheduleOpenDialog,
     // addScheduleCloseDialog,
@@ -61,7 +60,6 @@ const CalendarBoard = () => {
                 .then((snapshot) => {
                     snapshot.forEach((doc) => {
                         const postData = doc.data();
-                        console.log("postData:", postData);
                         const timestamp = postData.date.toDate();
                         const newSelectDate = { date: timestamp };
                         const newPostData = Object.assign(postData, newSelectDate);
