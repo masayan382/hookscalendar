@@ -9,7 +9,7 @@ import {
     Tooltip
 } from "@material-ui/core";
 import { Close, LocationOnOutlined, NotesOutlined, DeleteOutlineOutlined } from "@material-ui/icons";
-
+import EditIcon from '@material-ui/icons/Edit';
 import styles from "./style.module.css";
 import { currentScheduleCloseDialog } from "../../redux/currentSchedule/actions";
 import { useSelector, useDispatch } from "react-redux"
@@ -19,6 +19,8 @@ import {
     schedulesAsyncFailure
 } from "../../redux/schedules/actions";
 import { db } from "../../firebase";
+import { upDateScheduleOpenDialog } from "../../redux/UpdateSchedule/actions"
+import { addScheduleSetValue } from "../../redux/addSchedule/actions"
 
 const spacer = (top, bottom) => ({
     margin: `${top}px 0 ${bottom}px 0`
@@ -72,10 +74,21 @@ const CurrentScheduleDialog = () => {
         }
     }, [item]);
 
+    const openUpdateScheduleDialog = () => {
+        console.log('update');
+        dispatch(upDateScheduleOpenDialog());
+        closeDialog();
+    };
+
     return (
         <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="xs" fullWidth>
             <DialogActions>
                 <div className={styles.closeButton}>
+                    <Tooltip title="編集" placement="bottom">
+                        <IconButton onClick={openUpdateScheduleDialog} size="small">
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
                     <Tooltip title="削除" placement="bottom">
                         <IconButton onClick={() => deleteItem(id)} size="small">
                             <DeleteOutlineOutlined />

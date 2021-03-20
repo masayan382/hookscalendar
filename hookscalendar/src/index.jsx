@@ -13,6 +13,7 @@ import CalendarBoard from "./components/CalendarBoard/presentation";
 import Navigation from "./components/Navigation/presentation"
 import AddScheduleDialog from "./components/AddScheduleDialog/presentation";
 import CurrentScheduleDialog from "./components/CurrentScheduleDialog/presentation";
+import UpdateScheduleDialog from "./components/UpdateSchdeuleDialog/index"
 import ErrorSnackbar from "./components/ErrorSnackbar/presentation";
 
 import rootReducer from "./redux/rootReducer";
@@ -30,6 +31,7 @@ const App = () => (
       <CalendarBoard />
       <AddScheduleDialog />
       <CurrentScheduleDialog />
+      <UpdateScheduleDialog />
       <ErrorSnackbar />
     </MuiPickersUtilsProvider>
   </Provider>
