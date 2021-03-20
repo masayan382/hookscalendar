@@ -16,8 +16,9 @@ import { withStyles } from "@material-ui/styles";
 import {
     addScheduleCloseDialog,
     // addScheduleSetValue
-    addScheduleStartEdit
+    addScheduleStartEdit,
 } from "../../redux/addSchedule/actions";
+import { schedulesAsyncFailure } from "../../redux/schedules/actions"
 import { DatePicker } from "@material-ui/pickers";
 import * as styles from "./style.module.css";
 // import { schedulesAddItem } from "../../redux/schedules/actions";
@@ -74,12 +75,16 @@ const AddScheduleDialog = ({ }) => {
         const ref = postDataRef.doc();
         const id = ref.id
         postData.id = id;
-        await postDataRef.doc(id).set(postData).catch((error) => {
-            throw new Error(error);
-        });
-        const newSchedule = formatSchedule(postData);
-        // console.log("newSchedule:", newSchedule);
-        dispatch(schedulesAddItem(newSchedule));
+        try {
+            await postDataRef.doc(id).set(postData).catch((error) => {
+                throw new Error(error);
+            });
+            const newSchedule = formatSchedule(postData);
+            dispatch(schedulesAddItem(newSchedule));
+        } catch (err) {
+            console.error(err);
+            dispatch(schedulesAsyncFailure(err.message));
+        }
     }
 
     const initDialog = () => {

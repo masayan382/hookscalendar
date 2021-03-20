@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from "react-redux"
 import {
     schedulesSetLoading,
     schedulesDeleteItem,
+    schedulesAsyncFailure
 } from "../../redux/schedules/actions";
 import { db } from "../../firebase";
 
@@ -35,26 +36,26 @@ const CurrentScheduleDialog = () => {
     const [id, setId] = useState(null);
     const asyncSchedulesDeleteItem = (id) => async (dispatch, getState) => {
         dispatch(schedulesSetLoading());
-        console.log("引数id:", id);
         const currentSchedules = getState().schedules.items;
-        console.log("currentSchedules:", currentSchedules);
         const deleteYear = currentSchedules[0].date.$y;
-        console.log("dYear:", deleteYear);
         const deleteMonth = currentSchedules[0].date.$M + 1;
-        console.log("dMonth:", deleteMonth);
-
-        await db
-            .collection("post")
-            .doc(`${deleteYear}`)
-            .collection(`${deleteMonth}`)
-            .doc(`${id}`)
-            .delete()
-            .catch((error) => {
-                throw new Error(error);
-            });
-        const newSchedules = currentSchedules.filter((s) => s.id !== id);
-        console.log("newSchedules:", newSchedules);
-        dispatch(schedulesDeleteItem(newSchedules));
+        try {
+            await db
+                .collection("post")
+                .doc(`${deleteYear}`)
+                .collection(`${deleteMonth}`)
+                .doc(`${id}`)
+                .delete()
+                .catch((error) => {
+                    throw new Error(error);
+                });
+            const newSchedules = currentSchedules.filter((s) => s.id !== id);
+            console.log("newSchedules:", newSchedules);
+            dispatch(schedulesDeleteItem(newSchedules));
+        } catch (err) {
+            console.error(err);
+            dispatch(schedulesAsyncFailure(err.message));
+        }
     };
 
     const deleteItem = (id) => {
