@@ -8,13 +8,15 @@ import {
     Button,
     Input,
     Grid,
-    IconButton
+    IconButton,
+    Typography
 } from "@material-ui/core";
 import { LocationOnOutlined, NotesOutlined, AccessTime, Close } from "@material-ui/icons";
 import { withStyles } from "@material-ui/styles";
 import {
     addScheduleCloseDialog,
     // addScheduleSetValue
+    addScheduleStartEdit
 } from "../../redux/addSchedule/actions";
 import { DatePicker } from "@material-ui/pickers";
 import * as styles from "./style.module.css";
@@ -30,8 +32,9 @@ import { schedulesAddItem } from "../../redux/schedules/actions"
 const spacer = { margin: "4px 0" };
 
 const Title = withStyles({
-    root: { marginBottom: 32, fontSize: 22 }
+    root: { fontSize: 22 }
 })(Input);
+
 
 const AddScheduleDialog = ({ }) => {
     const state = useSelector(state => state.addSchedule);
@@ -39,6 +42,10 @@ const AddScheduleDialog = ({ }) => {
     const addedSchedule = useSelector(state => state.addSchedule.form.date);
     const isDialogOpen = state.isDialogOpen
     const dispatch = useDispatch();
+
+    const setIsEditStart = () => {
+        dispatch(addScheduleStartEdit());
+    }
 
     const closeDialog = () => {
         initDialog();
@@ -89,6 +96,11 @@ const AddScheduleDialog = ({ }) => {
     const [inputLocation, setInputLocation] = useState("");
     const [inputDescription, setinputDescription] = useState("");
 
+
+    const isStartEdit = state.isStartEdit;
+
+    const isTitleInvalid = !inputTitle && isStartEdit;
+
     useEffect(() => {
         handleDateChange(addedSchedule);
     }, [addedSchedule]);
@@ -109,7 +121,16 @@ const AddScheduleDialog = ({ }) => {
                     placeholder="タイトルと日時を追加"
                     value={inputTitle}
                     onChange={e => setInputTitle(e.target.value)}
+                    onBlur={setIsEditStart}
+                    error={isTitleInvalid}
                 />
+                <div className={styles.validation}>
+                    {isTitleInvalid && (
+                        <Typography variant="caption" component="div" color="error">
+                            タイトルは必須です。
+                        </Typography>
+                    )}
+                </div>
                 <Grid container spacing={1} alignItems="center" justify="space-between">
                     <Grid item>
                         <AccessTime />
@@ -157,7 +178,7 @@ const AddScheduleDialog = ({ }) => {
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button color="primary" variant="outlined" onClick={saveSchedule}>
+                <Button color="primary" variant="outlined" onClick={saveSchedule} disabled={!inputTitle}>
                     保存
                 </Button>
             </DialogActions>
