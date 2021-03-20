@@ -16,19 +16,17 @@ import { LocationOnOutlined, NotesOutlined, AccessTime, Close } from "@material-
 import { withStyles } from "@material-ui/styles";
 import {
     addScheduleCloseDialog,
-    // addScheduleSetValue
     addScheduleStartEdit,
 } from "../../redux/addSchedule/actions";
 import { schedulesAsyncFailure } from "../../redux/schedules/actions"
 import { DatePicker } from "@material-ui/pickers";
 import * as styles from "./style.module.css";
-// import { schedulesAddItem } from "../../redux/schedules/actions";
 import {
     db,
     FirebaseTimestamp
 } from "../../firebase.js";
 import dayjs from 'dayjs';
-import { formatSchedule } from "../../services/schedule";
+import { formatSchedule, isCloseDialog } from "../../services/schedule";
 import { schedulesAddItem } from "../../redux/schedules/actions"
 
 const spacer = { margin: "4px 0" };
@@ -40,7 +38,7 @@ const Title = withStyles({
 
 const AddScheduleDialog = ({ }) => {
     const state = useSelector(state => state.addSchedule);
-    // console.log("addSchedule", state);
+
     const addedSchedule = useSelector(state => state.addSchedule.form.date);
     const isDialogOpen = state.isDialogOpen
     const dispatch = useDispatch();
@@ -49,13 +47,16 @@ const AddScheduleDialog = ({ }) => {
         dispatch(addScheduleStartEdit());
     }
 
+    const closeConfirm = () => {
+        if (isCloseDialog(saveBefore)) {
+            closeDialog();
+        }
+    }
+
     const closeDialog = () => {
         initDialog();
         dispatch(addScheduleCloseDialog());
     }
-    // const setSchedule = (value) => {
-    //     dispatch(addScheduleSetValue(value));
-    // }
 
     const saveSchedule = async () => {
         await postBase();
@@ -97,11 +98,14 @@ const AddScheduleDialog = ({ }) => {
 
     const [inputTitle, setInputTitle] = useState("");
     const [selectedDate, handleDateChange] = useState(addedSchedule);
-    // console.log("selectedDate:", selectedDate);
-
     const [inputLocation, setInputLocation] = useState("");
     const [inputDescription, setinputDescription] = useState("");
-
+    const saveBefore = {
+        title: inputTitle,
+        date: selectedDate.$d,
+        location: inputLocation,
+        description: inputDescription,
+    }
 
     const isStartEdit = state.isStartEdit;
 
@@ -112,11 +116,11 @@ const AddScheduleDialog = ({ }) => {
     }, [addedSchedule]);
 
     return (
-        <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="xs" fullWidth>
+        <Dialog open={isDialogOpen} onClose={closeConfirm} maxWidth="xs" fullWidth>
             <DialogActions>
                 <div className={styles.closeButton}>
                     <Tooltip title="閉じる" placement="bottom">
-                        <IconButton onClick={closeDialog} size="small">
+                        <IconButton onClick={closeConfirm} size="small">
                             <Close />
                         </IconButton>
                     </Tooltip>
