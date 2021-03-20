@@ -83,7 +83,7 @@ const Navigation = () => {
             <IconButton>
                 <DehazeIcon />
             </IconButton>
-            <img src="/images/calendar_icon.png" width="40" height="40" />
+            <img src="/images/calendar_icon.png" width="40" height="40" alt="" />
             <StyledTypography color="textSecondary" variant="h5" component="h1">
                 カレンダー
             </StyledTypography>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux"
 import { GridList, Typography } from "@material-ui/core";
 import CalendarElement from "../CalendarElement";
@@ -6,48 +6,35 @@ import * as styles from "./style.module.css";
 import { createCalendar } from "../../services/calendar";
 import {
     addScheduleOpenDialog,
-    // addScheduleCloseDialog,
     addScheduleSetValue
 } from "../../redux/addSchedule/actions";
 import { setSchedules } from "../../services/schedule";
 import { currentScheduleSetItem, currentScheduleOpenDialog } from "../../redux/currentSchedule/actions";
-// import { asyncSchedulesFetchItem } from "../../redux/schedules/effects";
 import { schedulesSetLoading, schedulesFetchItem, schedulesAsyncFailure } from "../../redux/schedules/actions";
 import { formatSchedule } from "../../services/schedule";
 import { db } from "../../firebase";
-// import dayjs from "dayjs";
 
 const days = ["日", "月", "火", "水", "木", "金", "土"];
 
 const CalendarBoard = () => {
     const dispatch = useDispatch();
 
-
     const data = useSelector(state => state)
-    // console.log("state", data);
     const month = data.calendar;
-    // console.log("month:", month);
     const schedules = data.schedules.items
-    // console.log("schedules:", schedules);
     const calendar = setSchedules(createCalendar(month), schedules);
-    // console.log("calendar:", calendar);
     const openAddScheduleDialog = (d) => {
         dispatch(addScheduleOpenDialog());
         dispatch(addScheduleSetValue({ date: d }));
     };
-    // const closeDialog = () => {
-    //     dispatch(addScheduleCloseDialog());
-    // }
     const openCurrentScheduleDialog = (schedule, e) => {
         e.stopPropagation();
         dispatch(currentScheduleSetItem(schedule));
         dispatch(currentScheduleOpenDialog());
     }
-
     const fetchSchedule = (month) => {
         dispatch(asyncSchedulesFetchItem(month));
     };
-
     const asyncSchedulesFetchItem = () => async (dispatch) => {
         dispatch(schedulesSetLoading());
         const list = [];

@@ -20,7 +20,6 @@ const CalendarElement = ({ day, month, schedules, ...props }) => {
     const format = isFirstDay(day) ? "M月D日" : "D";
     const today = dayjs();
     const isToday = isSameDay(day, today);
-    // console.log("props:", props);
 
     return (
         <div className={styles.element}>

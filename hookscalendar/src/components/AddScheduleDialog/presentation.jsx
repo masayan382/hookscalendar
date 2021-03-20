@@ -36,7 +36,7 @@ const Title = withStyles({
 })(Input);
 
 
-const AddScheduleDialog = ({ }) => {
+const AddScheduleDialog = () => {
     const state = useSelector(state => state.addSchedule);
 
     const addedSchedule = useSelector(state => state.addSchedule.form.date);
@@ -95,7 +95,6 @@ const AddScheduleDialog = ({ }) => {
         setInputLocation("");
         setinputDescription("");
     }
-
     const [inputTitle, setInputTitle] = useState("");
     const [selectedDate, handleDateChange] = useState(addedSchedule);
     const [inputLocation, setInputLocation] = useState("");
@@ -106,9 +105,7 @@ const AddScheduleDialog = ({ }) => {
         location: inputLocation,
         description: inputDescription,
     }
-
     const isStartEdit = state.isStartEdit;
-
     const isTitleInvalid = !inputTitle && isStartEdit;
 
     useEffect(() => {
