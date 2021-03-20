@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { IconButton, Toolbar, Typography, withStyles } from "@material-ui/core";
+import { IconButton, Toolbar, Typography, withStyles, Tooltip } from "@material-ui/core";
 import { DatePicker } from "@material-ui/pickers";
 import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIos from "@material-ui/icons/ArrowForwardIos";
@@ -16,8 +16,6 @@ import dayjs from "dayjs";
 import { schedulesSetLoading, schedulesFetchItem } from "../../redux/schedules/actions";
 import { formatSchedule } from "../../services/schedule";
 import { db } from "../../firebase";
-// import { asyncSchedulesFetchItem } from "../../redux/schedules/effects";
-
 
 const StyledToolbar = withStyles({
     root: { padding: "0" }
@@ -48,15 +46,10 @@ const Navigation = () => {
         dispatch(calendarSetMonth(previousMonth));
         fetchItem(previousMonth);
     }
-
-    // const setMonth = () => {
-    //     const setMonthForm = formatMonth(month);
-    //     dispatch(calendarSetMonth(setMonthForm))
-    // };
-
-    const fetchItem = (month) => {
-        dispatch(asyncSchedulesFetchItem(month));
-    }
+    const fetchItem =
+        (month) => {
+            dispatch(asyncSchedulesFetchItem(month));
+        }
 
     const asyncSchedulesFetchItem = () => async (dispatch) => {
         dispatch(schedulesSetLoading());
@@ -94,12 +87,16 @@ const Navigation = () => {
             <StyledTypography color="textSecondary" variant="h5" component="h1">
                 カレンダー
             </StyledTypography>
-            <IconButton size="small" onClick={setPreviousMonth}>
-                <ArrowBackIos />
-            </IconButton>
-            <IconButton size="small" onClick={setNextMonth}>
-                <ArrowForwardIos />
-            </IconButton>
+            <Tooltip title="前の月" placement="bottom">
+                <IconButton size="small" onClick={setPreviousMonth}>
+                    <ArrowBackIos />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="次の月" placement="bottom">
+                <IconButton size="small" onClick={setNextMonth}>
+                    <ArrowForwardIos />
+                </IconButton>
+            </Tooltip>
             <StyledDatePicker
                 value={month}
                 onChange={handleDateChange}
