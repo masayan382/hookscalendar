@@ -28,7 +28,7 @@ import {
 import dayjs from 'dayjs';
 import { formatSchedule, isCloseDialog } from "../../services/schedule";
 import { schedulesAddItem } from "../../redux/schedules/actions"
-
+import { upDateScheduleCloseDialog } from "../../redux/UpdateSchedule/actions"
 const spacer = { margin: "4px 0" };
 
 const Title = withStyles({
@@ -37,25 +37,29 @@ const Title = withStyles({
 
 
 const UpdateScheduleDialog = () => {
-    const state = useSelector(state => state.addSchedule);
-
+    const state = useSelector(state => state);
+    console.log("state:", state)
     const addedSchedule = useSelector(state => state.addSchedule.form.date);
-    const isDialogOpen = state.isDialogOpen
+    const isDialogOpen = state.update.isDialogOpen;
+    const upDateItem = useSelector(state => state.update.item);
+    console.log("updateItem:", upDateItem);
+    const upDateDate = upDateItem.date;
+    console.log("upDateDate:", upDateDate);
     const dispatch = useDispatch();
 
-    const setIsEditStart = () => {
-        dispatch(addScheduleStartEdit());
-    }
+    // const setIsEditStart = () => {
+    //     dispatch(addScheduleStartEdit());
+    // }
 
-    const closeConfirm = () => {
-        if (isCloseDialog(saveBefore)) {
-            closeDialog();
-        }
-    }
+    // const closeConfirm = () => {
+    //     // initDialog();
+    //     dispatch((upDateScheduleCloseDialog));
+    //     console.log('close')
+    // }
 
     const closeDialog = () => {
         initDialog();
-        dispatch(addScheduleCloseDialog());
+        dispatch(upDateScheduleCloseDialog());
     }
 
     const saveSchedule = async () => {
@@ -95,29 +99,34 @@ const UpdateScheduleDialog = () => {
         setInputLocation("");
         setinputDescription("");
     }
-    const [inputTitle, setInputTitle] = useState("");
-    const [selectedDate, handleDateChange] = useState(addedSchedule);
-    const [inputLocation, setInputLocation] = useState("");
-    const [inputDescription, setinputDescription] = useState("");
-    const saveBefore = {
-        title: inputTitle,
-        date: selectedDate.$d,
-        location: inputLocation,
-        description: inputDescription,
-    }
-    const isStartEdit = state.isStartEdit;
-    const isTitleInvalid = !inputTitle && isStartEdit;
+    const [inputTitle, setInputTitle] = useState();
+    const [selectedDate, handleDateChange] = useState();
+    const [inputLocation, setInputLocation] = useState();
+    const [inputDescription, setinputDescription] = useState();
+    // const saveBefore = {
+    //     title: inputTitle,
+    //     date: selectedDate.$d,
+    //     location: inputLocation,
+    //     description: inputDescription,
+    // }
+    // const isStartEdit = state.isStartEdit;
+    // const isTitleInvalid = !inputTitle && isStartEdit;
 
     useEffect(() => {
-        handleDateChange(addedSchedule);
-    }, [addedSchedule]);
+        if (upDateItem.length !== 0) {
+            setInputTitle(upDateItem.title);
+            handleDateChange(upDateItem.date);
+            setInputLocation(upDateItem.location);
+            setinputDescription(upDateItem.description)
+        }
+    }, [upDateItem]);
 
     return (
-        <Dialog open={isDialogOpen} onClose={closeConfirm} maxWidth="xs" fullWidth>
+        <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="xs" fullWidth>
             <DialogActions>
                 <div className={styles.closeButton}>
                     <Tooltip title="閉じる" placement="bottom">
-                        <IconButton onClick={closeConfirm} size="small">
+                        <IconButton onClick={closeDialog} size="small">
                             <Close />
                         </IconButton>
                     </Tooltip>
@@ -130,16 +139,12 @@ const UpdateScheduleDialog = () => {
                     placeholder="タイトルと日時を追加"
                     value={inputTitle}
                     onChange={e => setInputTitle(e.target.value)}
-                    onBlur={setIsEditStart}
-                    error={isTitleInvalid}
                 />
-                <div className={styles.validation}>
-                    {isTitleInvalid && (
-                        <Typography variant="caption" component="div" color="error">
-                            タイトルは必須です。
+                {/* <div className={styles.validation}>
+                    <Typography variant="caption" component="div" color="error">
+                        タイトルは必須です。
                         </Typography>
-                    )}
-                </div>
+                </div> */}
                 <Grid container spacing={1} alignItems="center" justify="space-between">
                     <Grid item>
                         <AccessTime />

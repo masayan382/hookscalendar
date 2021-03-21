@@ -19,8 +19,8 @@ import {
     schedulesAsyncFailure
 } from "../../redux/schedules/actions";
 import { db } from "../../firebase";
-import { upDateScheduleOpenDialog } from "../../redux/UpdateSchedule/actions"
-import { addScheduleSetValue } from "../../redux/addSchedule/actions"
+import { upDateScheduleSetItem, upDateScheduleOpenDialog } from "../../redux/UpdateSchedule/actions"
+// import { addScheduleSetValue } from "../../redux/addSchedule/actions"
 
 const spacer = (top, bottom) => ({
     margin: `${top}px 0 ${bottom}px 0`
@@ -30,9 +30,11 @@ const CurrentScheduleDialog = () => {
     const dispatch = useDispatch();
     const state = useSelector(state => state);
     const schedule = state.currentSchedule;
+
     const closeDialog = () => {
         dispatch(currentScheduleCloseDialog());
     }
+
     const isDialogOpen = state.currentSchedule.isDialogOpen;
     const item = schedule.item;
 
@@ -74,9 +76,10 @@ const CurrentScheduleDialog = () => {
         }
     }, [item]);
 
-    const openUpdateScheduleDialog = () => {
-        console.log('update');
+    const upDateDialog = (item) => {
+        dispatch(upDateScheduleSetItem(item));
         dispatch(upDateScheduleOpenDialog());
+        console.log('update-end');
         closeDialog();
     };
 
@@ -85,7 +88,7 @@ const CurrentScheduleDialog = () => {
             <DialogActions>
                 <div className={styles.closeButton}>
                     <Tooltip title="編集" placement="bottom">
-                        <IconButton onClick={openUpdateScheduleDialog} size="small">
+                        <IconButton onClick={() => upDateDialog(item)} size="small">
                             <EditIcon />
                         </IconButton>
                     </Tooltip>
