@@ -19,9 +19,9 @@ const days = ["日", "月", "火", "水", "木", "金", "土"];
 const CalendarBoard = () => {
     const dispatch = useDispatch();
 
-    const data = useSelector(state => state)
-    const month = data.calendar;
-    const schedules = data.schedules.items
+    const state = useSelector(state => state)
+    const month = state.calendar;
+    const schedules = state.schedules.items
     const calendar = setSchedules(createCalendar(month), schedules);
     const openAddScheduleDialog = (d) => {
         dispatch(addScheduleOpenDialog());
