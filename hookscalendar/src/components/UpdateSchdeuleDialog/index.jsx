@@ -39,23 +39,13 @@ const Title = withStyles({
 const UpdateScheduleDialog = () => {
     const state = useSelector(state => state);
     console.log("state:", state)
-    const addedSchedule = useSelector(state => state.addSchedule.form.date);
+    // const addedSchedule = useSelector(state => state.addSchedule.form.date);
     const isDialogOpen = state.update.isDialogOpen;
     const upDateItem = useSelector(state => state.update.item);
-    console.log("updateItem:", upDateItem);
+    // console.log("updateItem:", upDateItem);
     const upDateDate = upDateItem.date;
-    console.log("upDateDate:", upDateDate);
+    // console.log("upDateDate:", upDateDate);
     const dispatch = useDispatch();
-
-    // const setIsEditStart = () => {
-    //     dispatch(addScheduleStartEdit());
-    // }
-
-    // const closeConfirm = () => {
-    //     // initDialog();
-    //     dispatch((upDateScheduleCloseDialog));
-    //     console.log('close')
-    // }
 
     const closeDialog = () => {
         initDialog();
@@ -76,13 +66,12 @@ const UpdateScheduleDialog = () => {
             location: inputLocation,
             description: inputDescription,
             createdAt: timestamp,
+            id: postId
         };
         const postDataRef = db.collection('post').doc(`${selectedDate.$y}`).collection(`${selectedDate.$M + 1}`);
         const ref = postDataRef.doc();
-        const id = ref.id
-        postData.id = id;
         try {
-            await postDataRef.doc(id).set(postData).catch((error) => {
+            await postDataRef.doc(postId).set(postData, { merge: true }).catch((error) => {
                 throw new Error(error);
             });
             const newSchedule = formatSchedule(postData);
@@ -103,14 +92,8 @@ const UpdateScheduleDialog = () => {
     const [selectedDate, handleDateChange] = useState();
     const [inputLocation, setInputLocation] = useState();
     const [inputDescription, setinputDescription] = useState();
-    // const saveBefore = {
-    //     title: inputTitle,
-    //     date: selectedDate.$d,
-    //     location: inputLocation,
-    //     description: inputDescription,
-    // }
-    // const isStartEdit = state.isStartEdit;
-    // const isTitleInvalid = !inputTitle && isStartEdit;
+    const [postId, setPostId] = useState();
+    console.log("id:", postId);
 
     useEffect(() => {
         if (upDateItem.length !== 0) {
@@ -118,6 +101,7 @@ const UpdateScheduleDialog = () => {
             handleDateChange(upDateItem.date);
             setInputLocation(upDateItem.location);
             setinputDescription(upDateItem.description)
+            setPostId(upDateItem.id);
         }
     }, [upDateItem]);
 
