@@ -21,7 +21,8 @@ const CalendarBoard = () => {
 
     const state = useSelector(state => state)
     const month = state.calendar;
-    const schedules = state.schedules.items
+    const schedules = state.schedules.items;
+    const update = state.update.item.length;
     const calendar = setSchedules(createCalendar(month), schedules);
     const openAddScheduleDialog = (d) => {
         dispatch(addScheduleOpenDialog());
@@ -62,8 +63,10 @@ const CalendarBoard = () => {
     };
 
     useEffect(() => {
-        fetchSchedule();
-    }, []);
+        if (update === 0) {
+            fetchSchedule();
+        }
+    }, [update]);
 
     return (
         <div className={styles.container}>

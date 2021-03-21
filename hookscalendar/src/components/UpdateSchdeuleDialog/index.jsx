@@ -21,8 +21,7 @@ import {
     db,
     FirebaseTimestamp
 } from "../../firebase.js";
-import { formatSchedule, isCloseDialog } from "../../services/schedule";
-import { schedulesAddItem, schedulesFetchItem } from "../../redux/schedules/actions"
+import { formatSchedule } from "../../services/schedule";
 import { upDateScheduleCloseDialog, upDateScheduleSetItem } from "../../redux/UpdateSchedule/actions"
 const spacer = { margin: "4px 0" };
 
@@ -33,7 +32,6 @@ const Title = withStyles({
 
 const UpdateScheduleDialog = () => {
     const state = useSelector(state => state);
-    console.log(state);
     const isDialogOpen = state.update.isDialogOpen;
     const upDateItem = useSelector(state => state.update.item);
     const dispatch = useDispatch();
@@ -45,11 +43,8 @@ const UpdateScheduleDialog = () => {
 
     const saveSchedule = async () => {
         await postBase();
-        // console.log('post')
         await dispatch(upDateScheduleCloseDialog());
-        // console.log('post close');
         initDialog();
-        console.log('post init');
     }
 
     const postBase = async () => {

@@ -55,7 +55,6 @@ const CurrentScheduleDialog = () => {
                     throw new Error(error);
                 });
             const newSchedules = currentSchedules.filter((s) => s.id !== id);
-            console.log("newSchedules:", newSchedules);
             dispatch(schedulesDeleteItem(newSchedules));
         } catch (err) {
             console.error(err);
@@ -79,7 +78,6 @@ const CurrentScheduleDialog = () => {
     const upDateDialog = (item) => {
         dispatch(upDateScheduleSetItem(item));
         dispatch(upDateScheduleOpenDialog());
-        console.log('update-end');
         closeDialog();
     };
 
