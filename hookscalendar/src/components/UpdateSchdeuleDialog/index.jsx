@@ -14,10 +14,6 @@ import {
 } from "@material-ui/core";
 import { LocationOnOutlined, NotesOutlined, AccessTime, Close } from "@material-ui/icons";
 import { withStyles } from "@material-ui/styles";
-import {
-    addScheduleCloseDialog,
-    addScheduleStartEdit,
-} from "../../redux/addSchedule/actions";
 import { schedulesAsyncFailure } from "../../redux/schedules/actions"
 import { DatePicker } from "@material-ui/pickers";
 import * as styles from "./style.module.css";
@@ -25,10 +21,9 @@ import {
     db,
     FirebaseTimestamp
 } from "../../firebase.js";
-import dayjs from 'dayjs';
 import { formatSchedule, isCloseDialog } from "../../services/schedule";
-import { schedulesAddItem } from "../../redux/schedules/actions"
-import { upDateScheduleCloseDialog } from "../../redux/UpdateSchedule/actions"
+import { schedulesAddItem, schedulesFetchItem } from "../../redux/schedules/actions"
+import { upDateScheduleCloseDialog, upDateScheduleSetItem } from "../../redux/UpdateSchedule/actions"
 const spacer = { margin: "4px 0" };
 
 const Title = withStyles({
@@ -38,13 +33,9 @@ const Title = withStyles({
 
 const UpdateScheduleDialog = () => {
     const state = useSelector(state => state);
-    console.log("state:", state)
-    // const addedSchedule = useSelector(state => state.addSchedule.form.date);
+    console.log(state);
     const isDialogOpen = state.update.isDialogOpen;
     const upDateItem = useSelector(state => state.update.item);
-    // console.log("updateItem:", upDateItem);
-    const upDateDate = upDateItem.date;
-    // console.log("upDateDate:", upDateDate);
     const dispatch = useDispatch();
 
     const closeDialog = () => {
@@ -54,8 +45,11 @@ const UpdateScheduleDialog = () => {
 
     const saveSchedule = async () => {
         await postBase();
-        await dispatch(addScheduleCloseDialog());
+        // console.log('post')
+        await dispatch(upDateScheduleCloseDialog());
+        // console.log('post close');
         initDialog();
+        console.log('post init');
     }
 
     const postBase = async () => {
@@ -75,7 +69,7 @@ const UpdateScheduleDialog = () => {
                 throw new Error(error);
             });
             const newSchedule = formatSchedule(postData);
-            dispatch(schedulesAddItem(newSchedule));
+            dispatch(upDateScheduleSetItem(newSchedule));
         } catch (err) {
             console.error(err);
             dispatch(schedulesAsyncFailure(err.message));
@@ -84,16 +78,16 @@ const UpdateScheduleDialog = () => {
 
     const initDialog = () => {
         setInputTitle("");
-        handleDateChange(dayjs(new Date()));
+        handleDateChange();
         setInputLocation("");
         setinputDescription("");
+        setPostId("");
     }
     const [inputTitle, setInputTitle] = useState();
     const [selectedDate, handleDateChange] = useState();
     const [inputLocation, setInputLocation] = useState();
     const [inputDescription, setinputDescription] = useState();
     const [postId, setPostId] = useState();
-    console.log("id:", postId);
 
     useEffect(() => {
         if (upDateItem.length !== 0) {
