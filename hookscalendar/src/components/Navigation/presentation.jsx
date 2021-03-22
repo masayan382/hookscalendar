@@ -51,7 +51,7 @@ const Navigation = () => {
             dispatch(asyncSchedulesFetchItem(month));
         }
 
-    const asyncSchedulesFetchItem = () => async (dispatch) => {
+    const asyncSchedulesFetchItem = (month) => async (dispatch) => {
         dispatch(schedulesSetLoading());
         const list = [];
         await db
