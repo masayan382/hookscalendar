@@ -9,11 +9,12 @@ import thunk from "redux-thunk";
 import DayjsUtils from "@date-io/dayjs";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 
-import CalendarBoard from "./components/CalendarBoard/presentation";
-import Navigation from "./components/Navigation/presentation"
-import AddScheduleDialog from "./components/AddScheduleDialog/presentation";
-import CurrentScheduleDialog from "./components/CurrentScheduleDialog/presentation";
-import ErrorSnackbar from "./components/ErrorSnackbar/presentation";
+import CalendarBoard from "./components/CalendarBoard/index";
+import Navigation from "./components/Navigation/index"
+import AddScheduleDialog from "./components/AddScheduleDialog/index";
+import CurrentScheduleDialog from "./components/CurrentScheduleDialog/index";
+import UpdateScheduleDialog from "./components/UpdateSchdeuleDialog/index"
+import ErrorSnackbar from "./components/ErrorSnackbar/index";
 
 import rootReducer from "./redux/rootReducer";
 
@@ -30,6 +31,7 @@ const App = () => (
       <CalendarBoard />
       <AddScheduleDialog />
       <CurrentScheduleDialog />
+      <UpdateScheduleDialog />
       <ErrorSnackbar />
     </MuiPickersUtilsProvider>
   </Provider>

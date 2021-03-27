@@ -1,9 +1,25 @@
-.element {
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    height: 18vh;
+.container {
+    height: 90vh;
 }
-.date {
-    padding: 5px 0;
-    height: 24px;
+.grid {
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+}
+.days {
+    border-right: 1px solid #ccc;
+    padding: 4px;
+    border-bottom: 1px solid #ccc;
+}
+
+.container li:nth-of-type(1) {
+    background-color: #f56d8133;
+    color: #fff;
+}
+.container li:nth-of-type(n + 2):nth-of-type(-n + 6) {
+    background-color: rgba(102, 102, 102, 0.123);
+    color: #fff;
+}
+.container li:nth-of-type(7) {
+    background-color: #6dbef03a;
+    color: #fff;
 }
