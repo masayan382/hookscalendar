@@ -9,7 +9,6 @@ import {
     Input,
     Grid,
     IconButton,
-    Typography,
     Tooltip
 } from "@material-ui/core";
 import { LocationOnOutlined, NotesOutlined, AccessTime, Close } from "@material-ui/icons";
@@ -37,8 +36,8 @@ const UpdateScheduleDialog = () => {
     const dispatch = useDispatch();
 
     const closeDialog = () => {
-        initDialog();
         dispatch(upDateScheduleCloseDialog());
+        initDialog();
     }
 
     const saveSchedule = async () => {
@@ -58,7 +57,6 @@ const UpdateScheduleDialog = () => {
             id: postId
         };
         const postDataRef = db.collection('post').doc(`${selectedDate.$y}`).collection(`${selectedDate.$M + 1}`);
-        const ref = postDataRef.doc();
         try {
             await postDataRef.doc(postId).set(postData, { merge: true }).catch((error) => {
                 throw new Error(error);
@@ -113,11 +111,6 @@ const UpdateScheduleDialog = () => {
                     value={inputTitle}
                     onChange={e => setInputTitle(e.target.value)}
                 />
-                {/* <div className={styles.validation}>
-                    <Typography variant="caption" component="div" color="error">
-                        タイトルは必須です。
-                        </Typography>
-                </div> */}
                 <Grid container spacing={1} alignItems="center" justify="space-between">
                     <Grid item>
                         <AccessTime />

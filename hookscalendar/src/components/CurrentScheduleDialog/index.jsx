@@ -20,7 +20,6 @@ import {
 } from "../../redux/schedules/actions";
 import { db } from "../../firebase";
 import { upDateScheduleSetItem, upDateScheduleOpenDialog } from "../../redux/UpdateSchedule/actions"
-// import { addScheduleSetValue } from "../../redux/addSchedule/actions"
 
 const spacer = (top, bottom) => ({
     margin: `${top}px 0 ${bottom}px 0`
