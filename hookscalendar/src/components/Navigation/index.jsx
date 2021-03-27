@@ -3,7 +3,7 @@ import { IconButton, Toolbar, Typography, withStyles, Tooltip } from "@material-
 import { DatePicker } from "@material-ui/pickers";
 import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIos from "@material-ui/icons/ArrowForwardIos";
-import DehazeIcon from "@material-ui/icons/Dehaze";
+// import DehazeIcon from "@material-ui/icons/Dehaze";
 import { useSelector, useDispatch } from "react-redux"
 import {
     getNextMonth,
@@ -18,7 +18,7 @@ import { formatSchedule } from "../../services/schedule";
 import { db } from "../../firebase";
 
 const StyledToolbar = withStyles({
-    root: { padding: "0" }
+    root: { padding: "0 0 0 50px" }
 })(Toolbar);
 
 const StyledTypography = withStyles({
@@ -51,7 +51,7 @@ const Navigation = () => {
             dispatch(asyncSchedulesFetchItem(month));
         }
 
-    const asyncSchedulesFetchItem = () => async (dispatch) => {
+    const asyncSchedulesFetchItem = (month) => async (dispatch) => {
         dispatch(schedulesSetLoading());
         const list = [];
         await db
@@ -80,10 +80,10 @@ const Navigation = () => {
 
     return (
         <StyledToolbar>
-            <IconButton>
+            {/* <IconButton>
                 <DehazeIcon />
-            </IconButton>
-            <img src="/images/calendar_icon.png" width="40" height="40" alt="" />
+            </IconButton> */}
+            <img src="/images/cal.png" width="40" height="40" alt="" />
             <StyledTypography color="textSecondary" variant="h5" component="h1">
                 カレンダー
             </StyledTypography>
